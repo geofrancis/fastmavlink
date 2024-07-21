@@ -40,30 +40,17 @@ SerialPIO Serial6(10, 11);
 
 
 #define SERIAL1 Serial1
-#define SERIAL1_BAUD 57600  // 57600 or 115200 are usually good choices
-
+#define SERIAL1_BAUD 115200  // 57600 or 115200 are usually good choices
 #define SERIAL2 Serial2
-#define SERIAL2_BAUD 57600  // 57600 or 115200 are usually good choices
-
-
+#define SERIAL2_BAUD 115200  // 57600 or 115200 are usually good choices
 #define SERIAL3 Serial3
-#define SERIAL3_BAUD 57600  // 57600 or 115300 are usually good choices
-
-
-
+#define SERIAL3_BAUD 115200  // 57600 or 115300 are usually good choices
 #define SERIAL4 Serial4
-#define SERIAL4_BAUD 57600  // 57600 or 115400 are usually good choices
-
-
+#define SERIAL4_BAUD 115200  // 57600 or 115400 are usually good choices
 #define SERIAL5 Serial5
-#define SERIAL5_BAUD 57600  // 57600 or 115500 are usually good choices
-
-
-
+#define SERIAL5_BAUD 115200  // 57600 or 115500 are usually good choices
 #define SERIAL6 Serial6
-#define SERIAL6_BAUD 57600  // 57600 or 115600 are usually good choices
-
-
+#define SERIAL6_BAUD 115200  // 57600 or 115600 are usually good choices
 
 
 //////////////////////serial1
@@ -87,8 +74,6 @@ void serial1_write_buf(uint8_t* buf, uint16_t len) {
 }
 
 
-
-
 /////////////////////////serial2
 
 uint16_t serial2_available(void) {
@@ -108,8 +93,6 @@ uint8_t serial2_has_space(uint16_t count) {
 void serial2_write_buf(uint8_t* buf, uint16_t len) {
   for (uint16_t i = 0; i < len; i++) SERIAL2.write(buf[i]);
 }
-
-
 
 
 /////////////////////////serial3
@@ -133,10 +116,6 @@ void serial3_write_buf(uint8_t* buf, uint16_t len) {
 }
 
 
-
-
-
-
 /////////////////////////serial4
 
 uint16_t serial4_available(void) {
@@ -158,10 +137,6 @@ void serial4_write_buf(uint8_t* buf, uint16_t len) {
 }
 
 
-
-
-
-
 /////////////////////////serial5
 
 uint16_t serial5_available(void) {
@@ -181,10 +156,6 @@ uint8_t serial5_has_space(uint16_t count) {
 void serial5_write_buf(uint8_t* buf, uint16_t len) {
   for (uint16_t i = 0; i < len; i++) SERIAL5.write(buf[i]);
 }
-
-
-
-
 
 
 /////////////////////////serial6
@@ -210,18 +181,9 @@ void serial6_write_buf(uint8_t* buf, uint16_t len) {
 
 
 
-
-
-
-
-
 uint32_t get_time_ms() {
   return millis();
 }
-
-
-
-
 
 
 // let's do this in addition, have a LED on a pin to visually see some action
@@ -494,12 +456,6 @@ void spinOnce(void) {
   }
 
 
-
-
-
-
-
-
   // read serial2
   // uses fmav_parse_and_check_to_frame_buf() for compactness
   uint16_t available2 = serial2_available();
@@ -524,12 +480,6 @@ void spinOnce(void) {
     }
   }
 
-
-
-
-
-
-
   // read serial3
   // uses fmav_parse_and_check_to_frame_buf() for compactness
   uint16_t available3 = serial3_available();
@@ -551,9 +501,6 @@ void spinOnce(void) {
       }
     }
   }
-
-
-
 
 
   // read serial4
@@ -578,10 +525,6 @@ void spinOnce(void) {
     }
   }
 
-
-
-
-
   // read serial5
   // uses fmav_parse_and_check_to_frame_buf() for compactness
   uint16_t available5 = serial5_available();
@@ -604,10 +547,6 @@ void spinOnce(void) {
     }
   }
 
-
-
-
-
   // read serial6
   // uses fmav_parse_and_check_to_frame_buf() for compactness
   uint16_t available6 = serial6_available();
@@ -629,13 +568,6 @@ void spinOnce(void) {
       }
     }
   }
-
-
-
-
-
-
-
 
 
 
@@ -675,6 +607,10 @@ void spinOnce(void) {
       if (serial1_has_space(count) && serial1_has_space(count)) {
         if (fmav_router_send_to_link(1)) serial1_write_buf(tx_buf, count);
         if (fmav_router_send_to_link(2)) serial2_write_buf(tx_buf, count);
+        if (fmav_router_send_to_link(3)) serial3_write_buf(tx_buf, count);
+        if (fmav_router_send_to_link(4)) serial4_write_buf(tx_buf, count);
+        if (fmav_router_send_to_link(5)) serial5_write_buf(tx_buf, count);
+        if (fmav_router_send_to_link(6)) serial6_write_buf(tx_buf, count);
         tx_msg_available = 0;
       }
     } else {
@@ -703,6 +639,10 @@ void setup() {
   fmav_status_reset(&status0);
   fmav_status_reset(&status1);
   fmav_status_reset(&status2);
+  fmav_status_reset(&status3);
+  fmav_status_reset(&status4);
+  fmav_status_reset(&status5);
+  fmav_status_reset(&status6);
 
   fmav_router_reset();
 
